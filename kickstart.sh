@@ -15,3 +15,5 @@ set -o nounset                                  # Treat unset variables as an er
 wget https://s3.amazonaws.com/weruns/forfun/Kickstarter/Kickstarter_2018-12-13T03_20_05_701Z.zip
 unzip Kickstarter_2018-12-13T03_20_05_701Z.zip -d ./data
 cat /data/Kickstarter*.csv | pipenv run csvgrep -c country -m US > ./data/usdata.csv
+cd kickstarter
+pipenv run scrapy crawl -a file=../data/usdata.csv -o ../data/data.csv
