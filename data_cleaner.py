@@ -4,10 +4,14 @@ import json
 from datetime import date
 
 
+with open('./categories.json') as categories_file:
+    CATEGORIES = json.load(categories_file)
+
+
 def clean_data(row):
     '''Cleans a few columns from input rows.'''
     row = row.copy()
-    row['category'] = json.loads(row['category'])['name']
+    row['category'] = CATEGORIES[row['source_url']]
     row['created_at'] = date.fromtimestamp(int(row['created_at'])).isoformat()
     row['deadline'] = date.fromtimestamp(int(row['deadline'])).isoformat()
     row['launched_at'] = date.fromtimestamp(int(row['launched_at'])).isoformat()
