@@ -23,5 +23,10 @@ class KsdataSpider(scrapy.Spider):
                 yield scrapy.Request(url, meta={'item': row})
 
     def parse(self, response):
-        description = parser.handle(response.css('.full-description').extract_first())
-        yield dict(response.meta['item'], description=description)
+        data = {
+                'description': parser.handle(response.css('.full-description').extract_first()),
+                'comment_count': response.css('#comments-emoji .count data::attr("data-value")').extract_first(),
+                'updates_count': response.css('#updates-emoji .count::text').extract_first(),
+                'faq_count': response.css('#faq-emoji .count::text').extract_first(),
+                }
+        yield dict(response.meta['item'], **data)
