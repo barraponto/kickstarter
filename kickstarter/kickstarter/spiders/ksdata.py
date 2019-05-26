@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 import csv
-import json
 import scrapy
 
 from ..parse_html import parser
@@ -19,9 +18,9 @@ class KsdataSpider(scrapy.Spider):
         with open(self.path) as csvinput:
             reader = csv.DictReader(csvinput)
             for row in reader:
-                urls = json.loads(row['urls'])
-                project_url = urls['web']['project']
-                yield scrapy.Request(project_url, meta={'item': row})
+                url = row['urls']
+                # url = url.replace('ref=discovery_category_newest', 'ref=category_newest') # @XXX: re-use old cache
+                yield scrapy.Request(url, meta={'item': row})
 
     def parse(self, response):
         description = parser.handle(response.css('.full-description').extract_first())
